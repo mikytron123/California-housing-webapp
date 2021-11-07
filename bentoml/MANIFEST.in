@@ -1,0 +1,2 @@
+include SVR/bentoml.yml
+graft SVR/artifacts
