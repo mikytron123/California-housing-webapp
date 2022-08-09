@@ -16,7 +16,7 @@ def main():
     #prediction
     st.subheader('2. Predictions')
     if st.button('Get Predictions'):
-        jsonreq = requests.post("http://api:5000/predict",json=df.to_dict())
+        jsonreq = requests.post("http://api:3000/predict",json=df.to_dict())
         preds = jsonreq.json()
         df["Predictions"] = preds
         st.write(df)

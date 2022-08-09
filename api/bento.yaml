@@ -1,0 +1,48 @@
+service: bento_service:svr
+name: svr_regressor
+version: g5j3awqwu275iaav
+bentoml_version: 1.0.2
+creation_time: '2022-08-07T23:11:25.326315+00:00'
+labels: {}
+models:
+- tag: svr:jocidjawuw6hkaav
+  module: bentoml.sklearn
+  creation_time: '2022-08-07T23:04:31.074865+00:00'
+runners:
+- name: svr
+  runnable_type: SklearnRunnable
+  models:
+  - svr:jocidjawuw6hkaav
+  resource_config: null
+apis:
+- name: predict
+  input_type: PandasDataFrame
+  output_type: NumpyNdarray
+docker:
+  distro: debian
+  python_version: '3.8'
+  cuda_version: null
+  env: null
+  system_packages: null
+  setup_script: null
+  base_image: null
+  dockerfile_template: null
+python:
+  requirements_txt: null
+  packages:
+  - scikit-learn
+  - pandas
+  - numpy
+  lock_packages: true
+  index_url: null
+  no_index: null
+  trusted_host: null
+  find_links: null
+  extra_index_url: null
+  pip_args: null
+  wheels: null
+conda:
+  environment_yml: null
+  channels: null
+  dependencies: null
+  pip: null
