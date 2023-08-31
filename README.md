@@ -32,6 +32,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+[streamlit-app-2022-08-10-23-08-72.webm](https://user-images.githubusercontent.com/25290130/184062032-b330c593-67fc-4483-a864-0820cb5b3f5f.webm)
+
 This is a webapp created using streamlit to make predictions for california housing prices. The backend uses a bentoml api endpoint. A SVR model is used for predictions
 
 ### Built With
