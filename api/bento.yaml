@@ -1,26 +1,128 @@
-service: bento_service:svr
+service: service:Housing_Regressor
 name: svr_regressor
-version: g5j3awqwu275iaav
-bentoml_version: 1.0.2
-creation_time: '2022-08-07T23:11:25.326315+00:00'
+version: v2
+bentoml_version: 1.3.3
+creation_time: '2024-08-27T23:15:53.687810+00:00'
 labels: {}
-models:
-- tag: svr:jocidjawuw6hkaav
-  module: bentoml.sklearn
-  creation_time: '2022-08-07T23:04:31.074865+00:00'
-runners:
-- name: svr
-  runnable_type: SklearnRunnable
+models: []
+runners: []
+entry_service: svr_regressor
+services:
+- name: svr_regressor
+  service: ''
   models:
-  - svr:jocidjawuw6hkaav
-  resource_config: null
-apis:
-- name: predict
-  input_type: PandasDataFrame
-  output_type: NumpyNdarray
+  - tag: svr:ahe3agtdyc7rqaav
+    module: bentoml.sklearn
+    creation_time: '2024-08-26T15:29:38.665695+00:00'
+  dependencies: []
+  config:
+    name: svr_regressor
+    workers: cpu_count
+    http:
+      port: 3010
+    metrics:
+      enabled: true
+    logging:
+      access:
+        enabled: true
+        request_content_length: true
+        request_content_type: true
+        response_content_length: true
+        response_content_type: true
+        skip_paths:
+        - /metrics
+        - /healthz
+        - /livez
+        - /readyz
+    tracing:
+      exporter_type: jaeger
+      jaeger:
+        protocol: thrift
+        collector_endpoint: https://jaeger:14268/api/traces
+        thrift:
+          agent_host_name: jaeger
+          agent_port: 6831
+          udp_split_oversized_batches: true
+    monitoring:
+      enabled: true
+      type: otlp
+      options:
+        endpoint: http://otel-collector:4318
+        insecure: true
+envs: []
+schema:
+  name: svr_regressor
+  type: service
+  routes:
+  - name: predict
+    route: /predict
+    batchable: false
+    input:
+      properties:
+        input_data:
+          items:
+            properties:
+              MedInc:
+                maximum: 15.0001
+                minimum: 0.4999
+                title: Medinc
+                type: number
+              HouseAge:
+                maximum: 52.0
+                minimum: 1.0
+                title: Houseage
+                type: number
+              AveRooms:
+                minimum: 0.846154
+                title: Averooms
+                type: number
+              AveBedrms:
+                minimum: 0.3333333333333333
+                title: Avebedrms
+                type: number
+              Population:
+                minimum: 3.0
+                title: Population
+                type: number
+              AveOccup:
+                minimum: 0.692308
+                title: Aveoccup
+                type: number
+              Latitude:
+                minimum: 32.54
+                title: Latitude
+                type: number
+              Longitude:
+                minimum: -124.35
+                title: Longitude
+                type: number
+            required:
+            - MedInc
+            - HouseAge
+            - AveRooms
+            - AveBedrms
+            - Population
+            - AveOccup
+            - Latitude
+            - Longitude
+            title: HousingData
+            type: object
+          title: Input Data
+          type: array
+      required:
+      - input_data
+      title: Input
+      type: object
+    output:
+      items:
+        type: number
+      title: listIODescriptor
+      type: array
+    is_task: false
+apis: []
 docker:
   distro: debian
-  python_version: '3.8'
+  python_version: '3.11'
   cuda_version: null
   env: null
   system_packages: null
@@ -33,7 +135,9 @@ python:
   - scikit-learn
   - pandas
   - numpy
+  - prometheus-client
   lock_packages: true
+  pack_git_packages: true
   index_url: null
   no_index: null
   trusted_host: null

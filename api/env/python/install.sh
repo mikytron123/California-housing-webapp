@@ -1,10 +1,18 @@
 #!/usr/bin/env bash
-set -ex
+set -exuo pipefail
 
 # Parent directory https://stackoverflow.com/a/246128/8643197
 BASEDIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )"
 
-PIP_ARGS=(--no-warn-script-location )
+pip_install() {
+    if command -v "uv" > /dev/null 2>&1; then
+        uv pip install "$@"
+    else
+        pip3 install "$@"
+    fi
+}
+
+PIP_ARGS=()
 
 # BentoML by default generates two requirement files:
 #  - ./env/python/requirements.lock.txt: all dependencies locked to its version presented during `build`
@@ -12,31 +20,37 @@ PIP_ARGS=(--no-warn-script-location )
 REQUIREMENTS_TXT="$BASEDIR/requirements.txt"
 REQUIREMENTS_LOCK="$BASEDIR/requirements.lock.txt"
 WHEELS_DIR="$BASEDIR/wheels"
-BENTOML_VERSION=${BENTOML_VERSION:-1.0.2}
+BENTOML_VERSION=${BENTOML_VERSION:-1.3.3}
 # Install python packages, prefer installing the requirements.lock.txt file if it exist
+pushd "$BASEDIR" &>/dev/null
 if [ -f "$REQUIREMENTS_LOCK" ]; then
     echo "Installing pip packages from 'requirements.lock.txt'.."
-    pip install -r "$REQUIREMENTS_LOCK" "${PIP_ARGS[@]}"
+    pip_install "${PIP_ARGS[@]}" -r "$REQUIREMENTS_LOCK"
 else
     if [ -f "$REQUIREMENTS_TXT" ]; then
         echo "Installing pip packages from 'requirements.txt'.."
-        pip install -r "$REQUIREMENTS_TXT" "${PIP_ARGS[@]}"
+        pip_install "${PIP_ARGS[@]}" -r "$REQUIREMENTS_TXT"
     fi
 fi
+popd &>/dev/null
 
-# Install user-provided wheels
-if [ -d "$WHEELS_DIR" ]; then
+# Attempt to expand the glob pattern. The nullglob option ensures that
+# the pattern itself is not returned if no files match.
+shopt -s nullglob
+wheels=($WHEELS_DIR/*.whl)
+
+if [ ${#wheels[@]} -gt 0 ]; then
     echo "Installing wheels packaged in Bento.."
-    pip install "$WHEELS_DIR"/*.whl "${PIP_ARGS[@]}"
+    pip_install "${PIP_ARGS[@]}" "${wheels[@]}"
 fi
 
+
 # Install the BentoML from PyPI if it's not already installed
-if python -c "import bentoml" &> /dev/null; then
-    existing_bentoml_version=$(python -c "import bentoml; print(bentoml.__version__)")
+if python3 -c "import bentoml" &> /dev/null; then
+    existing_bentoml_version=$(python3 -c "import bentoml; print(bentoml.__version__)")
     if [ "$existing_bentoml_version" != "$BENTOML_VERSION" ]; then
         echo "WARNING: using BentoML version ${existing_bentoml_version}"
     fi
 else
-    pip install bentoml==$BENTOML_VERSION
+    pip_install bentoml=="$BENTOML_VERSION"
 fi
-                    

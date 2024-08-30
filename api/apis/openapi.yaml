@@ -1,34 +1,177 @@
+components:
+  schemas:
+    HousingData:
+      properties:
+        AveBedrms:
+          minimum: 0.3333333333333333
+          title: Avebedrms
+          type: number
+        AveOccup:
+          minimum: 0.692308
+          title: Aveoccup
+          type: number
+        AveRooms:
+          minimum: 0.846154
+          title: Averooms
+          type: number
+        HouseAge:
+          maximum: 52.0
+          minimum: 1.0
+          title: Houseage
+          type: number
+        Latitude:
+          minimum: 32.54
+          title: Latitude
+          type: number
+        Longitude:
+          minimum: -124.35
+          title: Longitude
+          type: number
+        MedInc:
+          maximum: 15.0001
+          minimum: 0.4999
+          title: Medinc
+          type: number
+        Population:
+          minimum: 3.0
+          title: Population
+          type: number
+      required:
+      - MedInc
+      - HouseAge
+      - AveRooms
+      - AveBedrms
+      - Population
+      - AveOccup
+      - Latitude
+      - Longitude
+      title: HousingData
+      type: object
+    InternalServerError:
+      description: Internal Server Error
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: InternalServerError
+      type: object
+    InvalidArgument:
+      description: Bad Request
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: InvalidArgument
+      type: object
+    NotFound:
+      description: Not Found
+      properties:
+        detail:
+          title: Error Detail
+          type: string
+        error:
+          title: Message
+          type: string
+      required:
+      - error
+      title: NotFound
+      type: object
+    TaskStatusResponse:
+      properties:
+        created_at:
+          title: Created At
+          type: string
+        executed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Executed At
+        status:
+          enum:
+          - in_progress
+          - success
+          - failure
+          - cancelled
+          title: Status
+          type: string
+        task_id:
+          title: Task Id
+          type: string
+      required:
+      - task_id
+      - status
+      - created_at
+      - executed_at
+      title: TaskStatusResponse
+      type: object
+    predict__Input:
+      properties:
+        input_data:
+          items:
+            $ref: '#/components/schemas/HousingData'
+          title: Input Data
+          type: array
+      required:
+      - input_data
+      title: predict__Input
+      type: object
 info:
   contact:
-    email: contact@bentoml.ai
-  description: A Prediction Service built with BentoML
+    email: contact@bentoml.com
+    name: BentoML Team
+  description: "# svr_regressor:dev\n\n[![pypi_status](https://img.shields.io/badge/BentoML-1.3.3-informational)](https://pypi.org/project/BentoML)\n\
+    [![documentation_status](https://readthedocs.org/projects/bentoml/badge/?version=latest)](https://docs.bentoml.com/)\n\
+    [![join_slack](https://badgen.net/badge/Join/BentoML%20Slack/cyan?icon=slack)](https://l.bentoml.com/join-slack-swagger)\n\
+    [![BentoML GitHub Repo](https://img.shields.io/github/stars/bentoml/bentoml?style=social)](https://github.com/bentoml/BentoML)\n\
+    [![Twitter Follow](https://img.shields.io/twitter/follow/bentomlai?label=Follow%20BentoML&style=social)](https://twitter.com/bentomlai)\n\
+    \nThis is a Machine Learning Service created with BentoML.\n\n## Help\n\n* [\U0001F4D6\
+    \ Documentation](https://docs.bentoml.com/en/latest/): Learn how to use BentoML.\n\
+    * [\U0001F4AC Community](https://l.bentoml.com/join-slack-swagger): Join the BentoML\
+    \ Slack community.\n* [\U0001F41B GitHub Issues](https://github.com/bentoml/BentoML/issues):\
+    \ Report bugs and feature requests.\n* Tip: you can also [customize this README](https://docs.bentoml.com/en/latest/concepts/bento.html#description).\n"
   title: svr_regressor
-  version: 0.0.0
-openapi: 3.0.0
+  version: None
+openapi: 3.0.2
 paths:
   /healthz:
     get:
       description: Health check endpoint. Expecting an empty response with status
         code <code>200</code> when the service is in health state. The <code>/healthz</code>
-        endpoint is <b>deprecated</b> (since Kubernetes v1.16)
-      responses: &id001
+        endpoint is <b>deprecated</b>. (since Kubernetes v1.16)
+      responses:
         '200':
-          description: success
+          description: Successful Response
       tags:
-      - infra
+      - Infrastructure
   /livez:
     get:
       description: Health check endpoint for Kubernetes. Healthy endpoint responses
         with a <code>200</code> OK status.
-      responses: *id001
+      responses:
+        '200':
+          description: Successful Response
       tags:
-      - infra
+      - Infrastructure
   /metrics:
     get:
-      description: Prometheus metrics endpoint
-      responses: *id001
+      description: Prometheus metrics endpoint. The <code>/metrics</code> responses
+        with a <code>200</code>. The output can then be used by a Prometheus sidecar
+        to scrape the metrics of the service.
+      responses:
+        '200':
+          description: Successful Response
       tags:
-      - infra
+      - Infrastructure
   /predict:
     post:
       description: ''
@@ -37,35 +180,62 @@ paths:
         content:
           application/json:
             schema:
+              properties:
+                input_data:
+                  items:
+                    $ref: '#/components/schemas/HousingData'
+                  title: Input Data
+                  type: array
+              required:
+              - input_data
+              title: Input
               type: object
       responses:
-        '200':
+        200:
           content:
             application/json:
               schema:
-                items: {}
+                items:
+                  type: number
+                title: listIODescriptor
                 type: array
-          description: success
-        '400':
+          description: Successful Response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidArgument'
           description: Bad Request
-        '404':
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
           description: Not Found
-        '500':
+        500:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
           description: Internal Server Error
-      summary: "InferenceAPI(PandasDataFrame() \u2192 NumpyNdarray())"
       tags:
-      - app
+      - Service APIs
+      x-bentoml-name: predict
   /readyz:
     get:
       description: A <code>200</code> OK status from <code>/readyz</code> endpoint
         indicated the service is ready to accept traffic. From that point and onward,
         Kubernetes will use <code>/livez</code> endpoint to perform periodic health
         checks.
-      responses: *id001
+      responses:
+        '200':
+          description: Successful Response
       tags:
-      - infra
+      - Infrastructure
+servers:
+- url: .
 tags:
-- description: Infrastructure endpoints
-  name: infra
-- description: Inference endpoints
-  name: app
+- description: BentoML Service API endpoints for inference.
+  name: Service APIs
+- description: Common infrastructure endpoints for observability.
+  name: Infrastructure

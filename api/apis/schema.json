@@ -1,0 +1,90 @@
+{
+  "name": "svr_regressor",
+  "type": "service",
+  "routes": [
+    {
+      "name": "predict",
+      "route": "/predict",
+      "batchable": false,
+      "input": {
+        "properties": {
+          "input_data": {
+            "items": {
+              "properties": {
+                "MedInc": {
+                  "maximum": 15.0001,
+                  "minimum": 0.4999,
+                  "title": "Medinc",
+                  "type": "number"
+                },
+                "HouseAge": {
+                  "maximum": 52.0,
+                  "minimum": 1.0,
+                  "title": "Houseage",
+                  "type": "number"
+                },
+                "AveRooms": {
+                  "minimum": 0.846154,
+                  "title": "Averooms",
+                  "type": "number"
+                },
+                "AveBedrms": {
+                  "minimum": 0.3333333333333333,
+                  "title": "Avebedrms",
+                  "type": "number"
+                },
+                "Population": {
+                  "minimum": 3.0,
+                  "title": "Population",
+                  "type": "number"
+                },
+                "AveOccup": {
+                  "minimum": 0.692308,
+                  "title": "Aveoccup",
+                  "type": "number"
+                },
+                "Latitude": {
+                  "minimum": 32.54,
+                  "title": "Latitude",
+                  "type": "number"
+                },
+                "Longitude": {
+                  "minimum": -124.35,
+                  "title": "Longitude",
+                  "type": "number"
+                }
+              },
+              "required": [
+                "MedInc",
+                "HouseAge",
+                "AveRooms",
+                "AveBedrms",
+                "Population",
+                "AveOccup",
+                "Latitude",
+                "Longitude"
+              ],
+              "title": "HousingData",
+              "type": "object"
+            },
+            "title": "Input Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "input_data"
+        ],
+        "title": "Input",
+        "type": "object"
+      },
+      "output": {
+        "items": {
+          "type": "number"
+        },
+        "title": "listIODescriptor",
+        "type": "array"
+      },
+      "is_task": false
+    }
+  ]
+}
