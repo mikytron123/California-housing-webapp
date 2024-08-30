@@ -1,11 +1,14 @@
-FROM python:3.8
+FROM python:3.11-slim
 
-WORKDIR /usr/src/app
-ENV PYTHONUNBUFFERED=0
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r ./requirements.txt
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-COPY . /usr/src/app
-ENTRYPOINT ["streamlit", "run"]
+WORKDIR /app
 
-CMD ["app.py"]
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install -r requirements.txt
+
+COPY . .
+
+CMD ["streamlit","run","app.py"]

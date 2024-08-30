@@ -13,14 +13,27 @@ def main():
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        st.write(df.head())
+        st.dataframe(
+            df.head(),
+            column_config={
+                "_index": None,
+            },
+        )
     # prediction
     st.subheader("2. Predictions")
     if st.button("Get Predictions"):
-        jsonreq = requests.post("http://api:3000/predict", json=df.to_dict())
+        jsonreq = requests.post(
+            "http://api:3010/predict", json={"input_data": df.to_dict(orient="records")}
+        )
+        print(jsonreq.text)
         preds = jsonreq.json()
         df["Predictions"] = preds
-        st.write(df)
+        st.dataframe(
+            df,
+            column_config={
+                "_index": None,
+            },
+        )
 
 
 if __name__ == "__main__":
