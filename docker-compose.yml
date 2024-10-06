@@ -1,10 +1,12 @@
 services:
   api:
     build: ./api
+    env_file:
+      - .env
     ports:
-      - "3010:3010"
+      - "${API_PORT}:3010"
     command: 
-    - -p 3010
+    - -p $API_PORT
     depends_on:
       - prometheus
       - jaeger
@@ -17,6 +19,8 @@ services:
       - "8501:8501"
     depends_on:
       - api
+    env_file:
+      - .env
 
   prometheus:
     ports:
@@ -36,7 +40,6 @@ services:
       - prometheus
 
   jaeger:
-    container_name: jaeger2
     ports:
         - 6831:6831/udp
         - 5778:5778

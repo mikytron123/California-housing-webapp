@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import requests
+import os
+
+API_PORT = str(os.getenv("API_PORT"))
+API_HOST = str(os.getenv("API_HOST",default="localhost"))
 
 
 def main():
@@ -23,9 +27,8 @@ def main():
     st.subheader("2. Predictions")
     if st.button("Get Predictions"):
         jsonreq = requests.post(
-            "http://api:3010/predict", json={"input_data": df.to_dict(orient="records")}
+            f"http://{API_HOST}:{API_PORT}/predict", json={"input_data": df.to_dict(orient="records")}
         )
-        print(jsonreq.text)
         preds = jsonreq.json()
         df["Predictions"] = preds
         st.dataframe(
