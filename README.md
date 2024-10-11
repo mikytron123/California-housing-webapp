@@ -34,7 +34,8 @@
 
 [streamlit-app-2022-08-10-23-08-72.webm](https://user-images.githubusercontent.com/25290130/184062032-b330c593-67fc-4483-a864-0820cb5b3f5f.webm)
 
-This is a webapp created using streamlit to make predictions for california housing prices. The backend uses a bentoml api endpoint. A SVR model is used for predictions
+This is a webapp created using streamlit to make predictions for california housing prices. The backend uses a bentoml api endpoint. A SVR model is used for predictions.
+
 
 ### Built With
 
@@ -61,10 +62,6 @@ Install Docker for your OS
 
 3. Navigate to "localhost:8501" in your browser
 
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
 [Streamlit-url]: https://streamlit.io/
 [Streamlit.io]: https://img.shields.io/badge/Streamlit-0769AD?style=for-the-badge&logo=streamlit&logoColor=FF4B4B
 [Scikit-learn.org]: https://img.shields.io/badge/ScikitLearn-0769AD?style=for-the-badge&logo=scikit-learn&logoColor=F7931E
