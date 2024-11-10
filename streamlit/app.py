@@ -8,6 +8,7 @@ API_HOST = str(os.getenv("API_HOST",default="localhost"))
 
 
 def main():
+    df = pd.DataFrame()
     # headers
     st.title("California Housing Model")
     st.write("This app enables users to make predictions using a scikit learn model")
