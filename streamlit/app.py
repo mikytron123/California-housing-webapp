@@ -3,8 +3,14 @@ import pandas as pd
 import requests
 import os
 
-API_PORT = str(os.getenv("API_PORT"))
-API_HOST = str(os.getenv("API_HOST",default="localhost"))
+API_PORT = os.getenv("API_PORT")
+API_HOST = os.getenv("API_HOST", default="localhost")
+
+if API_PORT is None:
+    raise Exception("API_PORT must be set")
+
+if API_HOST is None:
+    raise Exception("API_HOST must be set")
 
 
 def main():
@@ -28,7 +34,8 @@ def main():
     st.subheader("2. Predictions")
     if st.button("Get Predictions"):
         jsonreq = requests.post(
-            f"http://{API_HOST}:{API_PORT}/predict", json={"input_data": df.to_dict(orient="records")}
+            f"http://{API_HOST}:{API_PORT}/predict",
+            json={"input_data": df.to_dict(orient="records")},
         )
         preds = jsonreq.json()
         df["Predictions"] = preds

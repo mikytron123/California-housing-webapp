@@ -57,8 +57,5 @@ services:
       - jaeger
       - loki
 
-volumes:
-    file_dir:
-    log_dir: 
 
 

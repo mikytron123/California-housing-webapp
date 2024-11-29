@@ -3,6 +3,16 @@ import numpy as np
 import bentoml
 from pydantic import BaseModel, Field
 from prometheus_client import Counter
+import os
+
+ALLOY_HOST = os.getenv("ALLOY_HOST")
+ALLOY_PORT = os.getenv("ALLOY_PORT")
+
+if ALLOY_HOST is None:
+    raise Exception("ALLOY_HOST must be set")
+
+if ALLOY_PORT is None:
+    raise Exception("ALLOY_PORT must be set")
 
 
 class HousingData(BaseModel):
@@ -43,14 +53,14 @@ prediction_counter = Counter(
         "sample_rate": 1.0,
         "otlp": {
             "protocol": "http",
-            "endpoint": "http://alloy:4318/v1/traces",
+            "endpoint": f"http://{ALLOY_HOST}:{ALLOY_PORT}/v1/traces",
         },
     },
     monitoring={
         "enabled": True,
         "type": "otlp",
         "options": {
-            "endpoint": "http://alloy:4318/v1/logs",
+            "endpoint": f"http://{ALLOY_HOST}:{ALLOY_PORT}/v1/logs",
             "insecure": True,
         },
     },
