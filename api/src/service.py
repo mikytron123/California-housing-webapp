@@ -7,12 +7,16 @@ import os
 
 ALLOY_HOST = os.getenv("ALLOY_HOST")
 ALLOY_PORT = os.getenv("ALLOY_PORT")
+API_PORT = os.getenv("API_PORT")
 
 if ALLOY_HOST is None:
     raise Exception("ALLOY_HOST must be set")
 
 if ALLOY_PORT is None:
     raise Exception("ALLOY_PORT must be set")
+
+if API_PORT is None:
+    raise Exception("API_PORT must be set")
 
 
 class HousingData(BaseModel):
@@ -36,7 +40,7 @@ prediction_counter = Counter(
 @bentoml.service(
     name="svr_regressor",
     workers="cpu_count",
-    http={"port": 3010},
+    http={"port": int(API_PORT)},
     metrics={"enabled": True},
     logging={
         "access": {

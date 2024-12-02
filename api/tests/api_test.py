@@ -28,10 +28,11 @@ def server_container():
     alloy_container.start()
     # make sure to build api image before hand
     api_image = "mlapp-api:latest"
-
-    server = ServerContainer(port=3010, image=str(api_image))
+    api_port = 3010
+    server = ServerContainer(port=api_port, image=str(api_image))
     server.with_env("ALLOY_HOST", alloy_container.get_container_host_ip())
     server.with_env("ALLOY_PORT", alloy_container.get_exposed_port(4318))
+    server.with_env("API_PORT",str(api_port))
     server.start()
     yield server
 
