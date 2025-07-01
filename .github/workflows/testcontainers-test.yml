@@ -1,0 +1,44 @@
+name: Run Pytest with Testcontainers
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # This service container is crucial for Testcontainers to work correctly.
+    # It ensures that the Docker daemon is available to the test runner.
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --network host
+        # The 'dind' (Docker in Docker) image requires privileged mode to run.
+        # This is a common and necessary configuration for Testcontainers in GitHub Actions.
+        # The `--network host` option allows the service to use the host's network stack,
+        # which can be useful for certain container networking scenarios.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          # You can specify any Python version you need, e.g., '3.11', '3.12'.
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install testcontainers python-on-whales
+
+      - name: Run pytest with Testcontainers
+        run: |
+          pytest api/tests/api_test.py
+        env:
+          # This environment variable is often required by Testcontainers for
+          # network configuration in some environments.
+          DOCKER_HOST: "tcp://localhost:2375"
