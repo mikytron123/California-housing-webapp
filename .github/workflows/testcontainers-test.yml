@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install httpx pytest testcontainers python-on-whales
+          pip install httpx pandas pytest testcontainers python-on-whales
 
       - name: Run pytest with Testcontainers
         run: |
