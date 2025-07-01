@@ -30,7 +30,6 @@ jobs:
       
       - name: Install Docker
         run: |
-          apt-get update
           apt-get install -y docker.io
       
       - name: Set up Docker Buildx
