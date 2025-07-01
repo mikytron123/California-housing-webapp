@@ -32,6 +32,9 @@ def server_container():
     alloy_container.with_exposed_ports(4318)
     alloy_container.start()
 
+    api_port = 3010
+    os.environ["API_PORT"] = str(api_port)
+    
     docker = DockerClient(compose_files=[str(cur_path.parent.parent / "docker-compose.yml")])
     docker.compose.build(services=["api"])
     # make sure to build api image before hand
