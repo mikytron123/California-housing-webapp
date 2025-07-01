@@ -39,7 +39,7 @@ def server_container():
     # docker.compose.build(services=["api"])
     # print(docker.image.list())
     # make sure to build api image before hand
-    api_image = "mlapp-api:latest"
+    api_image = "california-housing-webapp-api:latest"
     api_port = 3010
     server = ServerContainer(port=api_port, image=str(api_image))
     server.with_env("ALLOY_HOST", alloy_container.get_container_host_ip())
