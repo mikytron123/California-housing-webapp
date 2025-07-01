@@ -35,8 +35,9 @@ def server_container():
     api_port = 3010
     os.environ["API_PORT"] = str(api_port)
     
-    docker = DockerClient(compose_files=[str(cur_path.parent.parent / "docker-compose.yml")])
-    docker.compose.build(services=["api"])
+    # docker = DockerClient(compose_files=[str(cur_path.parent.parent / "docker-compose.yml")])
+    # docker.compose.build(services=["api"])
+    # print(docker.image.list())
     # make sure to build api image before hand
     api_image = "mlapp-api:latest"
     api_port = 3010
