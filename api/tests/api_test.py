@@ -2,6 +2,7 @@ from pathlib import Path
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.image import DockerImage
 from testcontainers.generic import ServerContainer
+from python_on_whales import DockerClient
 import os
 import sys
 import pytest
@@ -18,14 +19,21 @@ if path not in sys.path:
 
 @pytest.fixture(scope="module")
 def server_container():
-    cur_path = Path(__file__).resolve()
-    alloy_path = cur_path.parent.parent.parent / "alloy"
+    
+    cur_path = Path(__file__).parent.resolve()
+    print(cur_path)
+    print("------------------")
+    alloy_path = cur_path.parent.parent / "alloy"
+    print(alloy_path)
     alloy_image = DockerImage(path=str(alloy_path))
     alloy_image.build()
 
     alloy_container = DockerContainer(image=str(alloy_image))
     alloy_container.with_exposed_ports(4318)
     alloy_container.start()
+
+    docker = DockerClient(compose_files=[str(cur_path.parent.parent / "docker-compose.yml")])
+    docker.compose.build(services=["api"])
     # make sure to build api image before hand
     api_image = "mlapp-api:latest"
     api_port = 3010
