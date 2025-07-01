@@ -53,9 +53,9 @@ def test_predict_endpoint(server_container):
     # wait_for_logs(server_container, """Starting production HTTP BentoServer from "service:Housing_Regressor" listening on http://localhost:3008""")
     server_container.get_api_url = lambda: server_container._create_connection_url()
     client = server_container.get_client()
-    cur_path = Path(__file__).resolve()
+    cur_path = Path(__file__).parent.resolve()
 
-    csv_path = cur_path.parent.parent.parent / "X_head.csv"
+    csv_path = cur_path.parent.parent / "data" / "X_head.csv"
     df = pd.read_csv(str(csv_path))
 
     payload = {"input_data": df.to_dict(orient="records")}
