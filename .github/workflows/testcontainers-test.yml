@@ -28,15 +28,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Install Docker
-        run: |
-          apt-get install -y docker.io
-      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
-      - name: Set up Docker
-        uses: docker/setup-docker-action@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -52,7 +45,7 @@ jobs:
       - name: Run pytest with Testcontainers
         run: |
           pytest api/tests/api_test.py
-        env:
-          # This environment variable is often required by Testcontainers for
-          # network configuration in some environments.
-          DOCKER_HOST: "tcp://localhost:2375"
+        # env:
+        #   # This environment variable is often required by Testcontainers for
+        #   # network configuration in some environments.
+        #   DOCKER_HOST: "tcp://localhost:2375"
