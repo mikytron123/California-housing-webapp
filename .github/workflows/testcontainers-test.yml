@@ -14,7 +14,7 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options: --privileged --network host
+        options: --privileged
         # The 'dind' (Docker in Docker) image requires privileged mode to run.
         # This is a common and necessary configuration for Testcontainers in GitHub Actions.
         # The `--network host` option allows the service to use the host's network stack,
