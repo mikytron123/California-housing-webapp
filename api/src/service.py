@@ -1,9 +1,10 @@
-import pandas as pd
-import numpy as np
-import bentoml
-from pydantic import BaseModel, Field
-from prometheus_client import Counter
 import os
+
+import bentoml
+import numpy as np
+import pandas as pd
+from prometheus_client import Counter
+from pydantic import BaseModel, Field
 
 ALLOY_HOST = os.getenv("ALLOY_HOST")
 ALLOY_PORT = os.getenv("ALLOY_PORT")
@@ -70,7 +71,7 @@ prediction_counter = Counter(
     },
 )
 class Housing_Regressor:
-    bento_model = bentoml.models.get("svr:latest")
+    bento_model:bentoml.Model = bentoml.models.get("svr:latest")
 
     def __init__(self):
         self.model = bentoml.sklearn.load_model(self.bento_model)

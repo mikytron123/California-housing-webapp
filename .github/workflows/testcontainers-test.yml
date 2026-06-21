@@ -43,9 +43,10 @@ jobs:
           pip install httpx pandas pytest testcontainers python-on-whales
       - name: build docker api image
         run: |
+          export API_PORT
           docker compose build api
           docker images
-          
+
       - name: Run pytest with Testcontainers
         run: |
           pytest api/tests/api_test.py

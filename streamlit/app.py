@@ -1,17 +1,15 @@
-import streamlit as st
+import os
+
 import pandas as pd
 import requests
-import os
+
+import streamlit as st
 
 API_PORT = os.getenv("API_PORT")
 API_HOST = os.getenv("API_HOST", default="localhost")
 
 if API_PORT is None:
     raise Exception("API_PORT must be set")
-
-if API_HOST is None:
-    raise Exception("API_HOST must be set")
-
 
 def main():
     df = pd.DataFrame()

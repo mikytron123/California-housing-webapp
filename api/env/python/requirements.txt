@@ -4,4 +4,5 @@ pandas
 numpy
 prometheus-client
 opentelemetry-exporter-jaeger
-
+pydantic
+joblib

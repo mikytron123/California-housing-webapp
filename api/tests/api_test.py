@@ -1,12 +1,12 @@
+import os
+import sys
 from pathlib import Path
+
+import pandas as pd
+import pytest
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.image import DockerImage
 from testcontainers.generic import ServerContainer
-from python_on_whales import DockerClient
-import os
-import sys
-import pytest
-import pandas as pd
 
 path = os.getcwd()
 parent_path = Path().parent.resolve()
@@ -19,7 +19,7 @@ if path not in sys.path:
 
 @pytest.fixture(scope="module")
 def server_container():
-    
+
     cur_path = Path(__file__).parent.resolve()
     print(cur_path)
     print("------------------")
@@ -32,19 +32,13 @@ def server_container():
     alloy_container.with_exposed_ports(4318)
     alloy_container.start()
 
-    api_port = 3010
-    os.environ["API_PORT"] = str(api_port)
-    
-    # docker = DockerClient(compose_files=[str(cur_path.parent.parent / "docker-compose.yml")])
-    # docker.compose.build(services=["api"])
-    # print(docker.image.list())
     # make sure to build api image before hand
     api_image = "california-housing-webapp-api:latest"
     api_port = 3010
     server = ServerContainer(port=api_port, image=str(api_image))
     server.with_env("ALLOY_HOST", alloy_container.get_container_host_ip())
     server.with_env("ALLOY_PORT", alloy_container.get_exposed_port(4318))
-    server.with_env("API_PORT",str(api_port))
+    server.with_env("API_PORT", str(api_port))
     server.start()
     yield server
 

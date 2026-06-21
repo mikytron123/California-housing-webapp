@@ -1,5 +1,5 @@
-import joblib
 import bentoml
+import joblib
 
 model = joblib.load("model.pkl")
 
