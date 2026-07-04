@@ -1,6 +1,8 @@
 services:
   api:
     build: ./api
+    container_name: mlapi
+    image: mlapi
     env_file:
       - .env
       #    ports:

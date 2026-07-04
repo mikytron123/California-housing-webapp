@@ -71,7 +71,7 @@ prediction_counter = Counter(
     },
 )
 class Housing_Regressor:
-    bento_model:bentoml.Model = bentoml.models.get("svr:latest")
+    bento_model: bentoml.Model = bentoml.models.get("svr:latest")
 
     def __init__(self):
         self.model = bentoml.sklearn.load_model(self.bento_model)

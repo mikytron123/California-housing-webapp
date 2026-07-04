@@ -11,6 +11,7 @@ API_HOST = os.getenv("API_HOST", default="localhost")
 if API_PORT is None:
     raise Exception("API_PORT must be set")
 
+
 def main():
     df = pd.DataFrame()
     # headers
